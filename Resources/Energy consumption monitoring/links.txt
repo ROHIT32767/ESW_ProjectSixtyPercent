@@ -1,1 +1,0 @@
-https://circuitdigest.com/microcontroller-projects/diy-real-time-energy-monitoring-device-using-esp32
