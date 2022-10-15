@@ -1,0 +1,27 @@
+#include <SPI.h>
+#include <Wire.h>
+unsigned long duration, th, tl;
+  int ppm_CO2;
+#define PIN 19 
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+th = pulseIn(PIN, HIGH, 2008000) / 1000;
+  tl = 1004 - th;
+  ppm_CO2 = 2000 * (th - 2) / (th + tl - 4);
+
+  if (ppm_CO2 > 1000) {
+    Serial.println(ppm_CO2);
+    //ThingSpeak.setField(1, ppm_CO2);
+  }
+  else {
+    Serial.print(" Co2 Concentration: ");
+    Serial.println(ppm_CO2);
+    //ThingSpeak.setField(1, ppm_CO2);
+    //    Serial.println(" ppm_CO2");
+  }
+}

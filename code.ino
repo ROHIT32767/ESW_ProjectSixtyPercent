@@ -10,10 +10,13 @@
 
 #include "Adafruit_SHT4x.h"
 #include "Adafruit_SGP40.h"
-#include "Adafruit_SHT31.h"
+
+#define PRANA_PIN 19
 
 Adafruit_SHT4x sht4 = Adafruit_SHT4x();
 Adafruit_SGP40 sgp;
+unsigned long duration, th, tl;
+int ppm_CO2;
 
 void setup()
 {
@@ -120,6 +123,21 @@ void loop()
   voc_index = sgp.measureVocIndex(t, h);
   Serial.print("Voc Index: ");
   Serial.println(voc_index);
+
+  th = pulseIn(PRANA_PIN, HIGH, 2008000) / 1000;
+  tl = 1004 - th;
+  ppm_CO2 = 2000 * (th - 2) / (th + tl - 4);
+
+  if (ppm_CO2 > 1000) {
+    Serial.println(ppm_CO2);
+    //ThingSpeak.setField(1, ppm_CO2);
+  }
+  else {
+    Serial.print(" Co2 Concentration: ");
+    Serial.println(ppm_CO2);
+    //ThingSpeak.setField(1, ppm_CO2);
+    //    Serial.println(" ppm_CO2");
+  }
 
   delay(1000);
 }
