@@ -2,3 +2,13 @@
 *.svg
 *.pdf
 .vscode
+Server/frontend/node_modules
+Server/frontend/build
+Server/frontend/.env
+Server/backend/node_modules
+Server/backend/build
+Server/backend/.env
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
