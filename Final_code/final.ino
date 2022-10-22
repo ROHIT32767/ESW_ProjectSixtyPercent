@@ -48,7 +48,7 @@ String cse_ip = "192.168.123.219"; // YOUR IP from ipconfig/ifconfig
 String cse_port = "8080";
 String server = "http://" + cse_ip + ":" + cse_port + "/~/in-cse/in-name/";
 String ae = "Sensor Readings";
-String cnt[] = {"Prana PM2.5", "Prana PM10", "CO2 Levels", "VOC Levels", "Temperature", "Humidity"};
+String cnt[] = {"Prana_PM2.5", "Prana_PM10", "CO2_Levels", "VOC_Levels", "Temperature", "Humidity"};
 
 void reconnect()
 {
