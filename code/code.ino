@@ -11,6 +11,7 @@
 // #include <Adafruit_SHT4x.h>
 // #include <Adafruit_SGP40.h>
 #include <PMS.h>
+#include <SoftwareSerial.h>
 
 // #define PRANA_PIN 19
 
@@ -18,13 +19,15 @@
 // Adafruit_SGP40 sgp;
 // unsign/ed long duration, th, tl;
 // int pp_CO2;
-PMS pms(Serial2);
-PMS::DATA data;
+
+// SoftwareSerial pmsPort(12, 13);
+// PMS pms(pmsPort);
+// PMS::DATA data;
 
 void setup()
 {
 	Serial.begin(115200);
-	Serial2.begin(115200);
+	pmsPort.begin(9600);
 
 	// while (!Serial)
 	// 	delay(10); // will pause Zero, Leonardo, etc until serial console opens

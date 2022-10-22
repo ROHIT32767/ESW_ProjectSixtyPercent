@@ -50,6 +50,30 @@ String server = "http://" + cse_ip + ":" + cse_port + "/~/in-cse/in-name/";
 String ae = "Sensor Readings";
 String cnt[] = {"Prana_PM2.5", "Prana_PM10", "CO2_Levels", "VOC_Levels", "Temperature", "Humidity"};
 
+String Serverpassword = "ProjectSixtyPercent";
+String Server_url = "https://indoor-air-pollution-18.herokuapp.com/api/data/";
+
+void ServerWrite()
+{
+	HTTPClient http;
+
+	http.begin(Server_url);
+	
+	String body="";
+	body+="[";
+	body+=Serverpassword;
+	for(int i=1;i<ArrSize;i++){
+		body+=",";
+		body+=String(sensorVal[i]);
+	}
+	body+="]";
+	Serial.println(body);
+	if(http.POST(body) == -1){
+		Serial.println("UNABLE TO CONNECT TO THE SERVER");
+	}
+	http.end();
+}
+
 void reconnect()
 {
 	while (!mqttClient.connected())
@@ -227,5 +251,5 @@ void loop()
 
 	ThingSpeakWrite();
 	OM2MWrite();
-	// MongoDBWrite();
+	ServerWrite();
 }
