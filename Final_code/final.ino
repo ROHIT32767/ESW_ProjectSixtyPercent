@@ -5,8 +5,8 @@
 #include <ThingSpeak.h>
 #include <Adafruit_SHT4x.h>
 #include <Adafruit_SGP40.h>
+#include <PMS.h>
 
-// #define LowPower
 #define MongoDBPass 0
 #define PM2_5 1
 #define PM10 2
@@ -18,18 +18,18 @@
 
 #define PRANA_PIN 19
 
-const float sensorVal[ArrSize] = {0};
+float sensorVal[ArrSize] = {0};
 Adafruit_SHT4x sht4 = Adafruit_SHT4x();
 Adafruit_SGP40 sgp;
 unsigned long duration, th, tl;
 int ppm_CO2;
+PMS pms(Serial2);
+PMS::DATA data;
 
 String mongoDBpassword = "ProjectSixtyPercent";
 
 const char *WiFiSSID = ":heisrightyouknow:";
 const char *WiFiPassword = "ESW_PASS1234";
-
-#ifdef LowPower
 
 const char *mqttServer = "mqtt3.thingspeak.com";
 const char *mqttUserName = "Indoor Air Pollution";
@@ -41,8 +41,6 @@ const char *mqttPassword = "EXH40EH1B3EN2G85";
 WiFiClient client;
 PubSubClient mqttClient(mqttServer, 1883, client);
 
-#endif
-
 const unsigned long writeChannelID = 1878258;
 const char *writeAPIKey = "BT4CUUI80PXSGMG3";
 
@@ -50,14 +48,8 @@ String cse_ip = "192.168.123.219"; // YOUR IP from ipconfig/ifconfig
 String cse_port = "8080";
 String server = "http://" + cse_ip + ":" + cse_port + "/~/in-cse/in-name/";
 String ae = "Sensor Readings";
-String cnt_1 = "Prana PM2.5";
-String cnt_2 = "Prana PM10";
-String cnt_3 = "CO2 Levels";
-String cnt_4 = "VOC Levels";
-String cnt_5 = "Temperature";
-String cnt_6 = "Humidity";
+String cnt[] = {"Prana PM2.5", "Prana PM10", "CO2 Levels", "VOC Levels", "Temperature", "Humidity"};
 
-#ifdef LowPower
 void reconnect()
 {
 	while (!mqttClient.connected())
@@ -70,11 +62,8 @@ void reconnect()
 			delay(3000);
 	}
 }
-#endif
-
 void ThingSpeakWrite()
 {
-#ifdef LowPower
 	for (unsigned int i = 1; i < ArrSize; i++)
 	{
 		String fieldData = "field" + String(i) + "=" + sensorVal[i];
@@ -82,13 +71,6 @@ void ThingSpeakWrite()
 		mqttClient.publish(publishData.c_str(), fieldData.c_str());
 		delay(1000);
 	}
-#else
-	for (unsigned int i = 1; i < ArrSize; i++)
-	{
-		ThingSpeak.writeField(writeChannelID, i, sensorVal[i], writeAPIKey);
-		delay(1000);
-	}
-#endif
 }
 
 void OM2MWrite()
@@ -97,7 +79,7 @@ void OM2MWrite()
 
 	for (unsigned int i = 1; i < ArrSize; i++)
 	{
-		http.begin(server + ae + "/" + cnt_ + String(i) + "/");
+		http.begin(server + ae + "/" + cnt[i] + "/");
 		http.addHeader("X-M2M-Origin", "admin:admin");
 		http.addHeader("Content-Type", "application/json;ty=4");
 
@@ -110,6 +92,7 @@ void OM2MWrite()
 void setup()
 {
 	Serial.begin(115200);
+	Serial2.begin(9600);
 
 	Serial.println("Adafruit VOC test");
 	if (!sht4.begin())
@@ -187,24 +170,19 @@ void setup()
 	Serial.print("IP address is : ");
 	Serial.println(WiFi.localIP());
 
-#ifdef LowPower
 	mqttClient.setServer(mqttServer, 1883);
-#else
-	ThingSpeak.begin(client);
-#endif
 }
 
 void loop()
 {
-#ifdef LowPower
 	if (!mqttClient.connected())
 		reconnect();
 	mqttClient.loop();
-#endif
 
 	sensors_event_t humidity, temp;
 	uint16_t sraw;
 	int32_t voc_index;
+	int pm2_5, pm10;
 
 	sht4.getEvent(&humidity, &temp);
 
@@ -228,11 +206,18 @@ void loop()
 	if (ppm_CO2 > 1000)
 		Serial.println(ppm_CO2);
 	else
+		Serial.print(" Co2 Concentration: " + String(ppm_CO2));
+
+	if (pms.read(data))
 	{
-		Serial.print(" Co2 Concentration: ");
-		Serial.println(ppm_CO2);
+		pm2_5 = data.PM_AE_UG_2_5;
+		pm10 = data.PM_AE_UG_10_0;
+		Serial.println("PM2.5 :" + String(pm2_5) + "(ug/m3)");
+		Serial.println("PM10  :" + String(pm10) + "(ug/m3)");
 	}
 
+	sensorVal[PM2_5] = pm2_5;
+	sensorVal[PM10] = pm10;
 	sensorVal[CO2] = ppm_CO2;
 	sensorVal[VOC] = voc_index;
 	sensorVal[Temp] = t;
@@ -242,5 +227,5 @@ void loop()
 
 	ThingSpeakWrite();
 	OM2MWrite();
-	MongoDBWrite();
+	// MongoDBWrite();
 }
