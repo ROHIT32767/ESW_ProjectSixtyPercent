@@ -478,11 +478,17 @@ void loop()
 	// mqtt_Publish();
 
 	ThingSpeak.writeField(channel_ID, 1, String(pm2), Write_Api_Key);
+	delay(1000);
 	ThingSpeak.writeField(channel_ID, 2, String(pm10), Write_Api_Key);
+	delay(1000);
 	ThingSpeak.writeField(channel_ID, 3, String(ppm_CO2), Write_Api_Key);
+	delay(1000);
 	ThingSpeak.writeField(channel_ID, 4, String(t), Write_Api_Key);
+	delay(1000);
 	ThingSpeak.writeField(channel_ID, 5, String(h), Write_Api_Key);
+	delay(1000);
 	ThingSpeak.writeField(channel_ID, 6, String(voc_index), Write_Api_Key);
+	delay(1000);
 
 
 	CreateCIPM2_5();
