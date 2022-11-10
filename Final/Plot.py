@@ -8,30 +8,29 @@ content_PIR = []
 content_Speed = []
 creation_time = []
 
-uri_cse = "http://127.0.0.1:8080/~/in-cse/in-name"
-ae = "Lane-1"
-cnt_LDR = "LDR"
-cnt_PIR = "PIR"
-cnt_Speed = "Speed"
+uri_cse = "http://esw-onem2m.iiit.ac.in:443/~/in-cse/in-name"
+ae = "Team-18"
+cnt = ["Prana_PM2.5", "Prana_PM10", "CO2_Levels", "VOC_Levels", "Temperature", "Humidity"]
 
 uri_ae = uri_cse + "/" + ae
-uri_cnt_LDR = uri_ae + "/" + cnt_LDR
-uri_cnt_PIR = uri_ae + "/" + cnt_PIR
-uri_cnt_Speed = uri_ae + "/" + cnt_Speed
+# uri_cnt_LDR = uri_ae + "/" + cnt_LDR
+# uri_cnt_PIR = uri_ae + "/" + cnt_PIR
+# uri_cnt_Speed = uri_ae + "/" + cnt_Speed
+uri_cnt = uri_ae + "/" + cnt[0]
 '''
 headers = {
     'X-M2M-Origin': 'admin:admin',
     'Content-type': 'application/json'
 }'''
 
-response = get_data(uri_ae + "/LDR?rcn=4")
-print()
+response = get_data(uri_ae + "/Prana_PM2.5?rcn=4")
+# print(response["m2m:cnt"]["m2m:cin"][::][1]["con"])
 
 
 for data in response["m2m:cnt"]["m2m:cin"][::]:
-    if (float(data["con"]) > 500):
-        content_LDR.append(float(data["con"]))
-        creation_time.append(data["ct"][-4:-2] + ":" + data["ct"][-2:])
+    # if (float(data["con"]) > 500):
+    content_LDR.append(float(data["con"]))
+    creation_time.append(data["ct"][-4:-2] + ":" + data["ct"][-2:])
 
 ax = plt.gca()
 ax.axes.xaxis.set_ticks([])
