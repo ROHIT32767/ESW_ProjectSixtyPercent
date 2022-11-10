@@ -5,7 +5,8 @@ Adafruit_SHT4x sht4 = Adafruit_SHT4x();
 Adafruit_SGP40 sgp;
 float t, h;
 uint16_t sraw;
-int32_t voc_index;
+int32_t voc_index = 0;
+int flag = 0;
 
 void setup()
 {
@@ -86,6 +87,66 @@ void loop()
 {
     sensors_event_t humidity, temp;
 
+    while (!voc_index)
+    {
+        uint32_t timestamp = millis();
+        sht4.getEvent(&humidity, &temp); // populate temp and humidity objects with fresh data
+        timestamp = millis() - timestamp;
+
+        t = temp.temperature;
+        h = humidity.relative_humidity;
+        Serial.print("Temperature: ");
+        Serial.print(t);
+        Serial.println(" degrees C");
+        Serial.print("Humidity: ");
+        Serial.print(h);
+        Serial.println("% rH");
+
+        Serial.print("Read duration (ms): ");
+        Serial.println(timestamp);
+
+        sraw = sgp.measureRaw(t, h);
+        Serial.print("Raw measurement: ");
+        Serial.println(sraw);
+
+        voc_index = sgp.measureVocIndex(t, h);
+        Serial.print("Voc Index: ");
+        Serial.println(voc_index);
+
+        delay(100);
+    }
+
+    for (int i = 0; i < 100 && !flag; i++)
+    {
+        uint32_t timestamp = millis();
+        sht4.getEvent(&humidity, &temp); // populate temp and humidity objects with fresh data
+        timestamp = millis() - timestamp;
+
+        t = temp.temperature;
+        h = humidity.relative_humidity;
+        Serial.print("Temperature: ");
+        Serial.print(t);
+        Serial.println(" degrees C");
+        Serial.print("Humidity: ");
+        Serial.print(h);
+        Serial.println("% rH");
+
+        Serial.print("Read duration (ms): ");
+        Serial.println(timestamp);
+
+        sraw = sgp.measureRaw(t, h);
+        Serial.print("Raw measurement: ");
+        Serial.println(sraw);
+
+        voc_index = sgp.measureVocIndex(t, h);
+        Serial.print("Voc Index: ");
+        Serial.println(voc_index);
+
+        delay(500);
+    }
+
+    flag = 1;
+
     uint32_t timestamp = millis();
     sht4.getEvent(&humidity, &temp); // populate temp and humidity objects with fresh data
     timestamp = millis() - timestamp;
@@ -110,5 +171,5 @@ void loop()
     Serial.print("Voc Index: ");
     Serial.println(voc_index);
 
-    delay(1000);
+    delay(500);
 }

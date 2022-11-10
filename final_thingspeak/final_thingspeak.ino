@@ -1,13 +1,3 @@
-/***************************************************
-  This is an example for the SHT4x Humidity & Temp Sensor
-
-  Designed specifically to work with the SHT4x sensor from Adafruit
-  ----> https://www.adafruit.com/products/4885
-
-  These sensors use I2C to communicate, 2 pins are required to
-  interface
- ****************************************************/
-
 #include <Adafruit_SHT4x.h>
 #include <Adafruit_SGP40.h>
 #include <Wire.h>
@@ -15,8 +5,6 @@
 
 #include <WiFi.h>
 #include <ThingSpeak.h>
-// #include <mqtt_client.h>
-// #include <PubSubClient.h>
 #include <HTTPClient.h>
 
 #define PRANA_PIN 19
@@ -26,11 +14,14 @@ char *pass = "ESW_PASS1234";
 
 Adafruit_SHT4x sht4 = Adafruit_SHT4x();
 Adafruit_SGP40 sgp;
+
 unsigned long duration, th, tl;
-int ppm_CO2;
 float t, h;
 uint16_t sraw;
 int32_t voc_index = 0;
+
+int ppm_CO2;
+
 int pm2 = 0, pm10 = 0;
 
 ///////////////////////////////////////////////////////
@@ -38,7 +29,7 @@ int pm2 = 0, pm10 = 0;
 //////////////////////////////////////////////////////
 
 String Serverpassword = "ProjectSixtyPercent";
-String Server_url = "https://indoor-air-pollution-18.herokuapp.com/api/data/";
+String Server_url = "https://indoor-air-pollution-18.onrender.com/api/data/";
 
 void ServerWrite()
 {
@@ -69,7 +60,7 @@ void ServerWrite()
 		Serial.println("UNABLE TO CONNECT TO THE SERVER");
 	http.end();
 
-	delay(100);
+	delay(500);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -78,71 +69,9 @@ void ServerWrite()
 // MQTT
 ////////////////////////////////////////////////////////
 
-// const char *server_mqtt = "mqtt3.thingspeak.com";
 char *Write_Api_Key = "MT7RVJ6QVMI3LO7X";
-char *Read_Api_Key = "86FKCRBLN1IJ3G0X";
-// char *mqtt_clientID = "OjkuKSsAOB8SGBwKKwovFio"; //
-char *pubChannelID = "1904939";
-// const char *mqtt_password = "2S30jiD1Joarlobggy6yg5ym"; //
 int channel_ID = 1904939;
-
 WiFiClient client;
-// PubSubClient mqttClient(server_mqtt, 1883, client);
-
-// void mqttConnect()
-// {
-// 	while (mqttClient.connected() == 0)
-// 	{
-// 		Serial.println("Connecting to mqtt client");
-// 		if (mqttClient.connect(mqtt_clientID, mqtt_clientID, mqtt_password))
-// 		{
-// 			Serial.println("Connected to MQTT");
-// 		}
-// 		else
-// 		{
-// 			Serial.println("Unable to connect to MQTT, Trying again");
-// 			delay(5000);
-// 		}
-// 	}
-// }
-
-// void mqtt_reconnect()
-// {
-// 	if (!mqttClient.connected())
-// 		mqttConnect();
-// 	mqttClient.loop();
-// }
-
-// void mqtt_Publish()
-// {
-// 	Serial.print("inside Publish");
-// 	String topicString = "channels/" + String(pubChannelID) + "/publish";
-// 	mqtt_reconnect();
-// 	delay(100);
-// 	String dataString = "field1=" + String(pm2);
-// 	mqttClient.publish(topicString.c_str(), dataString.c_str());
-// 	mqtt_reconnect();
-// 	delay(100);
-// 	dataString = "field2=" + String(pm10);
-// 	mqttClient.publish(topicString.c_str(), dataString.c_str());
-// 	mqtt_reconnect();
-// 	delay(100);	
-// 	dataString = "field3=" + String(ppm_CO2);
-// 	mqttClient.publish(topicString.c_str(), dataString.c_str());
-// 	mqtt_reconnect();
-// 	delay(100);
-// 	dataString = "field4=" + String(t);
-// 	mqttClient.publish(topicString.c_str(), dataString.c_str());
-// 	mqtt_reconnect();
-// 	delay(100);
-// 	dataString = "field5=" + String(h);
-// 	mqttClient.publish(topicString.c_str(), dataString.c_str());
-// 	mqtt_reconnect();
-// 	delay(100);
-// 	dataString = "field6=" + String(voc_index);
-// 	mqttClient.publish(topicString.c_str(), dataString.c_str());
-// 	delay(100);
-// }
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -401,7 +330,6 @@ void setup()
 	}
 
 	Serial.println("Connected to WIFI");
-	// mqttClient.setServer(server_mqtt, 1883);
 	ThingSpeak.begin(client);
 
 	PM_setup();
@@ -471,25 +399,15 @@ void loop()
 	Serial.println(ppm_CO2);
 
 	PM_Reading();
-
-	// if (!mqttClient.connected())
-	// 	mqttConnect();
-	// mqttClient.loop();
-	// mqtt_Publish();
-
-	ThingSpeak.writeField(channel_ID, 1, String(pm2), Write_Api_Key);
-	delay(1000);
-	ThingSpeak.writeField(channel_ID, 2, String(pm10), Write_Api_Key);
-	delay(1000);
-	ThingSpeak.writeField(channel_ID, 3, String(ppm_CO2), Write_Api_Key);
-	delay(1000);
-	ThingSpeak.writeField(channel_ID, 4, String(t), Write_Api_Key);
-	delay(1000);
-	ThingSpeak.writeField(channel_ID, 5, String(h), Write_Api_Key);
-	delay(1000);
-	ThingSpeak.writeField(channel_ID, 6, String(voc_index), Write_Api_Key);
-	delay(1000);
-
+	
+	ThingSpeak.setField(1, pm2);
+	ThingSpeak.setField(2, pm10);
+	ThingSpeak.setField(3, ppm_CO2);
+	ThingSpeak.setField(4, t);
+	ThingSpeak.setField(5, h);
+	ThingSpeak.setField(6, voc_index);
+	ThingSpeak.writeFields(channel_ID, Write_Api_Key);
+	delay(3000);
 
 	CreateCIPM2_5();
 	CreateCIPM10();

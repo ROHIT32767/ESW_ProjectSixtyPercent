@@ -38,7 +38,7 @@ int pm2 = 0, pm10 = 0;
 //////////////////////////////////////////////////////
 
 String Serverpassword = "ProjectSixtyPercent";
-String Server_url = "https://indoor-air-pollution-18.herokuapp.com/api/data/";
+String Server_url = "https://indoor-air-pollution-18.onrender.com/api/data/";
 
 void ServerWrite()
 {
