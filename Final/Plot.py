@@ -8,7 +8,7 @@ content_PIR = []
 content_Speed = []
 creation_time = []
 
-uri_cse = "http://esw-onem2m.iiit.ac.in:443/~/in-cse/in-name"
+uri_cse = "https://esw-onem2m.iiit.ac.in:443/~/in-cse/in-name"
 ae = "Team-18"
 cnt = ["Prana_PM2.5", "Prana_PM10", "CO2_Levels", "VOC_Levels", "Temperature", "Humidity"]
 
@@ -23,21 +23,21 @@ headers = {
     'Content-type': 'application/json'
 }'''
 
-response = get_data(uri_ae + "/Prana_PM2.5?rcn=4")
-# print(response["m2m:cnt"]["m2m:cin"][::][1]["con"])
+for i in cnt:
+    response = get_data(uri_ae + "/" + str(i) + "?rcn=4")
+    print(response["m2m:cnt"]["m2m:cin"][::][4]["con"])
 
+# for data in response["m2m:cnt"]["m2m:cin"][::]:
+#     # if (float(data["con"]) > 500):
+#     content_LDR.append(float(data["con"]))
+#     creation_time.append(data["ct"][-4:-2] + ":" + data["ct"][-2:])
 
-for data in response["m2m:cnt"]["m2m:cin"][::]:
-    # if (float(data["con"]) > 500):
-    content_LDR.append(float(data["con"]))
-    creation_time.append(data["ct"][-4:-2] + ":" + data["ct"][-2:])
-
-ax = plt.gca()
-ax.axes.xaxis.set_ticks([])
-plt.xlabel("Time")
-plt.ylabel("Value of LDR")
-plt.plot(creation_time, content_LDR)
-plt.show()
+# ax = plt.gca()
+# ax.axes.xaxis.set_ticks([])
+# plt.xlabel("Time")
+# plt.ylabel("Value of LDR")
+# plt.plot(creation_time, content_LDR)
+# plt.show()
 
 ###################################################################################
 
