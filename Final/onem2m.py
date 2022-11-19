@@ -55,7 +55,7 @@ def create_cnt(uri_ae, cnt_name, cnt_labels="", data_format="json"):
     body = {
         "m2m:cnt": {
             "rn": "{}".format(cnt_name),
-            "mni": 2000,
+            "mni": 1000000,
             "lbl": cnt_labels
         }
     }

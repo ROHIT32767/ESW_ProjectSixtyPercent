@@ -25,7 +25,9 @@ headers = {
 
 for i in cnt:
     response = get_data(uri_ae + "/" + str(i) + "?rcn=4")
-    print(response["m2m:cnt"]["m2m:cin"][::][4]["con"])
+    for j in response["m2m:cnt"]["m2m:cin"][::]:
+        print(j["con"], end=" ")
+    print()
 
 # for data in response["m2m:cnt"]["m2m:cin"][::]:
 #     # if (float(data["con"]) > 500):
