@@ -371,10 +371,10 @@ void setup()
 			Serial.print(" Co2 Concentration: ");
 		Serial.println(ppm_CO2);
 
-		PM_Reading();
-
 		delay(10);
 	}
+	
+	PM_Reading();
 }
 
 void loop()
