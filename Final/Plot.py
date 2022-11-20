@@ -23,11 +23,14 @@ headers = {
     'Content-type': 'application/json'
 }'''
 
+readings = int(0)
 for i in cnt:
     response = get_data(uri_ae + "/" + str(i) + "?rcn=4")
     for j in response["m2m:cnt"]["m2m:cin"][::]:
         print(j["con"], end=" ")
+        readings += 1
     print()
+print(str(int(readings / 6)) + " readings have been taken")
 
 # for data in response["m2m:cnt"]["m2m:cin"][::]:
 #     # if (float(data["con"]) > 500):
