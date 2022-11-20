@@ -254,8 +254,8 @@ void setup()
 {
 	Serial.begin(9600);
 
-	while (!Serial)
-		delay(10); // will pause Zero, Leonardo, etc until serial console opens
+	// while (!Serial)
+	// 	delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
 	Serial.println("Adafruit VOC test");
 	if (!sht4.begin())
@@ -323,6 +323,10 @@ void setup()
 		Serial.println("Low heat for 0.1 second");
 		break;
 	}
+
+	WiFi.begin(ssid, pass);
+	Serial.print(".");
+	delay(3000);
 	while (WiFi.status() != WL_CONNECTED)
 	{
 		WiFi.begin(ssid, pass);
@@ -333,44 +337,22 @@ void setup()
 	Serial.println("Connected to WIFI");
 	ThingSpeak.begin(client);
 
-	delay(5000);
+	// delay(5000);
 
 	PM_setup();
 
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 500; i++)
 	{
-		uint32_t timestamp = millis();
 		sht4.getEvent(&humidity, &temp); // populate temp and humidity objects with fresh data
-		timestamp = millis() - timestamp;
 
 		t = temp.temperature;
 		h = humidity.relative_humidity;
-		Serial.print("Temperature: ");
-		Serial.print(t);
-		Serial.println(" degrees C");
-		Serial.print("Humidity: ");
-		Serial.print(h);
-		Serial.println("% rH");
-
-		Serial.print("Read duration (ms): ");
-		Serial.println(timestamp);
 
 		sraw = sgp.measureRaw(t, h);
-		Serial.print("Raw measurement: ");
-		Serial.println(sraw);
-
 		voc_index = sgp.measureVocIndex(t, h);
 		Serial.print("Voc Index: ");
 		Serial.println(voc_index);
-
-		th = pulseIn(PRANA_PIN, HIGH, 2008000) / 1000;
-		tl = 1004 - th;
-		ppm_CO2 = 2000 * (th - 2) / (th + tl - 4);
-
-		if (ppm_CO2 <= 1000)
-			Serial.print(" Co2 Concentration: ");
-		Serial.println(ppm_CO2);
-
+		Serial.println(i);
 		delay(10);
 	}
 
@@ -434,8 +416,7 @@ void loop()
 	tl = 1004 - th;
 	ppm_CO2 = 2000 * (th - 2) / (th + tl - 4);
 
-	if (ppm_CO2 <= 1000)
-		Serial.print(" Co2 Concentration: ");
+	Serial.print("Co2 Concentration: ");
 	Serial.println(ppm_CO2);
 
 	PM_Reading();

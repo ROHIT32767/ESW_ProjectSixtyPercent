@@ -92,12 +92,12 @@ void setup()
 
 	WiFi.begin(ssid, pass);
 	Serial.print(".");
-	delay(3000);
+	delay(1000);
 	while (WiFi.status() != WL_CONNECTED)
 	{
 		WiFi.begin(ssid, pass);
 		Serial.print(".");
-		delay(3000);
+		delay(1000);
 	}
 	Serial.println("Connected to WIFI");
 	ThingSpeak.begin(client);
@@ -113,7 +113,7 @@ void loop()
 		Serial.print(" Co2 Concentration: ");
 	Serial.println(ppm_CO2);
 
-	int x = ThingSpeak.writeField(1904939, 3, ppm_CO2, "MT7RVJ6QVMI3LO7X");
-	Serial.println(x);
+	// int x = ThingSpeak.writeField(1904939, 3, ppm_CO2, "MT7RVJ6QVMI3LO7X");
+	// Serial.println(x);
 	delay(1000);
 }

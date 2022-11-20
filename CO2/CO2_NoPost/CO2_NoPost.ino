@@ -13,8 +13,7 @@ void loop()
     tl = 1004 - th;
     ppm_CO2 = 2000 * (th - 2) / (th + tl - 4);
 
-    if (ppm_CO2 <= 1000)
-        Serial.print(" Co2 Concentration: ");
+    Serial.print("Co2 Concentration: ");
     Serial.println(ppm_CO2);
-    delay(5000);
+    delay(1000);
 }

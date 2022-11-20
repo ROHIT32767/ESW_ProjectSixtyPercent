@@ -8,7 +8,7 @@ content_PIR = []
 content_Speed = []
 creation_time = []
 
-uri_cse = "https://esw-onem2m.iiit.ac.in:443/~/in-cse/in-name"
+uri_cse = "http://esw-onem2m.iiit.ac.in:443/~/in-cse/in-name"
 ae = "Team-18"
 cnt = ["Prana_PM2.5", "Prana_PM10", "CO2_Levels", "VOC_Levels", "Temperature", "Humidity"]
 
