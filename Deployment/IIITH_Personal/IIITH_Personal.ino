@@ -373,7 +373,7 @@ void setup()
 
 		delay(10);
 	}
-	
+
 	PM_Reading();
 }
 
@@ -439,6 +439,22 @@ void loop()
 	Serial.println(ppm_CO2);
 
 	PM_Reading();
+
+	int flag = 0;
+
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		WiFi.begin(ssid, pass);
+		Serial.print(".");
+		delay(3000);
+		flag = 1;
+	}
+
+	if (flag)
+	{
+		Serial.println("Connected to WIFI");
+		ThingSpeak.begin(client);
+	}
 
 	ThingSpeak.setField(1, pm2);
 	ThingSpeak.setField(2, pm10);
