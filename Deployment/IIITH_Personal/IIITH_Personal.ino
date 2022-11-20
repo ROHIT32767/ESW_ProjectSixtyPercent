@@ -333,9 +333,9 @@ void setup()
 	Serial.println("Connected to WIFI");
 	ThingSpeak.begin(client);
 
-	PM_setup();
-
 	delay(5000);
+
+	PM_setup();
 
 	for (int i = 0; i < 1000; i++)
 	{
