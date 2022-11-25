@@ -29,13 +29,14 @@ for i in cnt:
     for j in response["m2m:cnt"]["m2m:cin"][::]:
         print(j["con"], end=" ")
         readings += 1
-    print()
+    print("\n")
 print(str(int(readings / 6)) + " readings have been taken")
 
+# response = get_data(uri_ae + "/" + "VOC_Levels" + "?rcn=4")
 # for data in response["m2m:cnt"]["m2m:cin"][::]:
 #     # if (float(data["con"]) > 500):
 #     content_LDR.append(float(data["con"]))
-#     creation_time.append(data["ct"][-4:-2] + ":" + data["ct"][-2:])
+#     creation_time.append(data["ct"])
 
 # ax = plt.gca()
 # ax.axes.xaxis.set_ticks([])
