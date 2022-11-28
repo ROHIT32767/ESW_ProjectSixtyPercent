@@ -16,7 +16,7 @@ def create_ae(uri_cse, ae_name, ae_labels="", data_format="json"):
         data_format : [str] payload format
     """
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/{};ty=2'.format(data_format)}
     
     body = {
@@ -49,13 +49,13 @@ def create_cnt(uri_ae, cnt_name, cnt_labels="", data_format="json"):
     """
 
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/{};ty=3'.format(data_format)}
 
     body = {
         "m2m:cnt": {
             "rn": "{}".format(cnt_name),
-            "mni": 1000000,
+            "mni": 120,
             "lbl": cnt_labels
         }
     }
@@ -82,7 +82,7 @@ def create_desc_cin(uri_desc_cnt, node_description, desc_cin_labels="", data_for
     """
 
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/{};ty=4'.format(data_format)}
 
     body = {
@@ -113,7 +113,7 @@ def create_data_cin(uri_cnt, value, cin_labels="", data_format="json"):
         fmt_ex : [str] payload format
     """
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/{};ty=4'.format(data_format)}
 
     body = {
@@ -144,7 +144,7 @@ def create_group(uri_cse, group_name, uri_list):
     """
 
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/json;ty=9'
     }
 
@@ -179,7 +179,7 @@ def get_data(uri, data_format="json"):
         fmt_ex : [str] payload format
     """
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/{}'.format(data_format)}
 
     response = requests.get(uri, headers=headers)
@@ -203,7 +203,7 @@ def get_group_data(uri, data_format="json"):
         fmt_ex : [str] payload format
     """
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/{}'.format(data_format)}
 
     response = requests.get(uri, headers=headers)
@@ -226,7 +226,7 @@ def delete(uri, data_format="json"):
         fmt_ex : [str] payload format
     """
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/{}'.format(data_format)}
 
     response = requests.delete(uri, headers=headers)
@@ -248,7 +248,7 @@ def discovery(uri="", data_format="json"):
         fmt_ex : [str] payload format
     """
     headers = {
-        'X-M2M-Origin': 'lp2MgQ:e4A#PT',
+        'X-M2M-Origin': 'admin:admin',
         'Content-type': 'application/{}'.format(data_format)}
 
     response = requests.delete(uri, headers=headers)

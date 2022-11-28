@@ -21,6 +21,12 @@
 - `PM2.5` readings are given to be strictly calibrated
 - Draws less current of `70mA`
 
+## Working mechanism:
+- This sensor works on the principle of `90° light scattering technique`, which helps in determining particle sizes
+- Air enters the sensor and particles interact with the LASER beam striking the mirror aperture in the sensor
+- The photodiode in the sensor captures the light scattered by the particles which leads to the generation of a signal
+- The particle count and mass cam be obtained from this signal
+
 <hr>
 
 # Prana Air NDIR CO2 Sensor:
@@ -43,13 +49,18 @@
 - Operating humidity - `0 to 95% RH (non-condensing)`
 - Draws less current of `20mA`
 
+## Working mechanism:
+- Gas enters the sensor
+- Sensor emits IR waves which are absorbed by the CO2 particles at a wavelength of `4.26 µm`
+- The level of absorption is directly proportional to number of CO2 molecules and thus their concentration
+
 <hr>
 
 # Adafruit SGP40 + SHT4x Sensor:
 
 ## Working mechanism:
 - Uses heater that controls hotplate T-sensors and heater controllers (both analog)
-- Uses MOx material that handles analog frontend (data reading)
+- Uses MOx material that handles analog frontend (data reading) by reacting with hydrocarbons in the air and gives the raw measurement
 - System controller (digital) uses data from on-chip memory (digital) and interacts with heater controllers along with the analog frontend to handle signal processing (digital) which interacts with the I2C interface
 - Raw measurement is obtained from raw signal `SRAW` which is directly proportional to the logarithm of the resistance of the MOx material
 - Takes `30ms` to take one measurement
@@ -87,11 +98,64 @@
 
 - VOCs can also enter a building via polluted outdoor air.
 
-- Common examples of VOCs include:
-    - Benzine, emitted from petroleum
-    - Formaldehyde, common in many fabrics, coatings and building materials
-    - Acetone, found wallpaper
-    - Ethanol, found in paints
-    - Butanone, found in paints and other coatings, glues and cleaning products
-    - Ethylene glycol, used in industrial solvents, paints and detergents
-    - Methylene chloride, used for paint strippers, degreasing, cleaning and manufacturing
+- Sources:
+    - paints, paint strippers and other solvents
+    - wood preservatives
+    - aerosol sprays
+    - cleansers and disinfectants
+    - moth repellents and air fresheners
+    - stored fuels and automotive products
+
+<hr>
+
+# CO2:
+
+- Sources:
+    - Use of any type of unvented fuel-burning space heater, such as a kerosene, natural gas, or propane heater will result in elevated levels. 
+    - High levels also can occur when several people are in a poorly ventilated room
+    - Tobacco smoke and outdoor air
+
+- Permissible Limits:
+    - Outdoor air concentrations normally vary from 320-400 ppm
+    - Complaints of poor indoor air quality are unusual if Co2 concentrations are less than 700-800 ppm
+    - In crowded and underventilated rooms , CO2 levels may rise to 2000-5000 ppm
+    - Indoor CO2 concentration of less than 1000ppm indicate fresh air supply
+
+<hr>
+
+# PM
+- Sources:
+    - woodstoves, pellet stove, gas stoves, kerosene heaters, gas space heaters
+    - Candles, incense, electric oil diffusers/pad diffusers and air fresheners 
+    - Vacuum cleaners without HEPA filtration
+    - pollens, mold spores, dust mites and cockroaches
+    - 3D printers, laser cutters, and soldering
+
+- Permissible Limits:
+    - The short-term standard (24-hour or daily average) is 35 micrograms per cubic meter of air (µg/m3) and the long-term standard (annual average) is 12 µg/m3. A microgram is a unit of weight. There are a million micrograms in a gram, and a pound is equal to about 450 grams.
+
+<hr>
+
+# Frontend
+- Core Framework used: React
+    * Easy Dynamic data loading and dynamic rendering
+    * Conditional rendering
+
+- Charts framework: ChartJS
+    * Easy to customize and use
+
+- CSS Framework: Tailwinded
+    * Ready made templates available
+    * Easy cutomisation
+    * Fast coding
+
+# Backend
+- Why a backend when you have OM2M and Thingspeak?
+    * We wanted to send active email alerts to users, Which is not possible in OM2M/Thingspeak
+    * Thingspeak is unreliable (Slow http response and missing data)
+    * OM2M hangs when it holds large data volumes
+- NodeJS:
+    * Along with a dashboard , We also provided api's to get our data from ourt server, which can be used by any other developer.
+    * automated emails using nodemailer
+- MongoDB:
+    * To store large data amounts , without issues
